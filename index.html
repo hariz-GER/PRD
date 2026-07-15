@@ -7,9 +7,9 @@
 <style>
 *{box-sizing:border-box}
 :root{--rose:#f24b7f;--wine:#59152f;--blush:#ffe3ea;--cream:#fffaf7;--gold:#f6b85d}
-body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,-apple-system,sans-serif;background:radial-gradient(circle at 18% 14%,#fff2c8 0 10%,transparent 28%),radial-gradient(circle at 90% 20%,#ffc7d8 0 12%,transparent 30%),linear-gradient(135deg,#7c1740,#f05f87 45%,#ffd0bd);overflow:hidden;color:var(--wine)}
+body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,-apple-system,sans-serif;background:radial-gradient(circle at 18% 14%,#fff2c8 0 10%,transparent 28%),radial-gradient(circle at 90% 20%,#ffc7d8 0 12%,transparent 30%),linear-gradient(135deg,#7c1740,#f05f87 45%,#ffd0bd);overflow-x:hidden;overflow-y:auto;color:var(--wine);padding:18px 0}
 body:before{content:"";position:fixed;inset:0;background:linear-gradient(#ffffff22 1px,transparent 1px),linear-gradient(90deg,#ffffff18 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 82%);pointer-events:none}
-.scene{width:min(94vw,960px);display:grid;grid-template-columns:.9fr minmax(330px,430px) .9fr;align-items:center;gap:18px;position:relative;z-index:2}
+.scene{width:min(94vw,960px);display:grid;grid-template-columns:.9fr minmax(330px,430px) .9fr;align-items:start;gap:18px;position:relative;z-index:2}
 .photo-strip{display:grid;gap:18px}
 .polaroid{min-height:178px;padding:10px 10px 38px;background:var(--cream);border-radius:8px;box-shadow:0 20px 45px #4b0f2d55;transform:rotate(var(--tilt));position:relative;overflow:hidden}
 .polaroid:after{content:attr(data-caption);position:absolute;left:12px;right:12px;bottom:11px;text-align:center;font-weight:800;color:#8a2547;font-size:14px}
@@ -32,10 +32,18 @@ button:hover{transform:translateY(-2px)}
 .mini-gallery img{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;background:#ffe3ea;border:3px solid #fff;box-shadow:0 8px 18px #7c174033}
 .mini-gallery img.missing{display:none}
 .promise{padding:12px;border-radius:14px;background:#fff4f7;border:1px solid #ffd2df;font-weight:700}
+.proposal{margin-top:18px;padding-top:4px}
+.proposal h2{margin:8px 0 14px;font-size:clamp(1.45rem,4vw,1.9rem)}
+.proposal-actions{min-height:76px;display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap}
+.proposal-actions button{min-width:118px;margin:0}
+.proposal-actions button:hover{transform:none}
+#yes{background:linear-gradient(135deg,#ff5f98,#c51662)}
+#no{background:linear-gradient(135deg,#8b8b9a,#4d4c5d);z-index:20}
+#answer h2{margin-bottom:8px}
 .floating{position:fixed;bottom:-40px;animation:float 6s linear infinite;opacity:.78;z-index:1}
 @keyframes float{to{transform:translateY(-115vh) rotate(360deg);opacity:0}}
 .hidden{display:none}.big{font-size:2.5rem}.kiss{font-size:2rem}
-@media (max-width:820px){body{overflow:auto}.scene{grid-template-columns:1fr;padding:18px}.photo-strip{grid-template-columns:repeat(3,1fr);order:2}.photo-strip.right{display:none}.polaroid{min-height:auto;padding:7px 7px 28px}.polaroid img,.polaroid.missing:before{height:auto;aspect-ratio:1}.polaroid:after{font-size:11px;bottom:8px}.card{order:1}}
+@media (max-width:820px){.scene{grid-template-columns:1fr;padding:18px}.photo-strip{grid-template-columns:repeat(3,1fr);order:2}.photo-strip.right{display:none}.polaroid{min-height:auto;padding:7px 7px 28px}.polaroid img,.polaroid.missing:before{height:auto;aspect-ratio:1}.polaroid:after{font-size:11px;bottom:8px}.card{order:1}}
 </style>
 </head>
 <body>
@@ -79,10 +87,13 @@ button:hover{transform:translateY(-2px)}
 <p>En life la vandha best gift nee dhaan ❤️ Un smile, un care, un love ellame enakku romba special. Sandai potalum, kovam vandhalum, I will always choose you 😘</p>
 <p class="promise">Nee irundha pothum, every ordinary day becomes my favorite memory.</p>
 <p class="kiss">💋😘💖</p>
-<h2>Will you be my forever? ❤️</h2>
-<button onclick="downloadAnswers()">Download Excel Sheet 📄</button>
-<button onclick="sendAnswersToWhatsApp()">Send Answers to WhatsApp 💌</button>
-<button onclick="yes()">YES 😘</button><button id="no" onmouseover="moveNo()" onclick="moveNo()">NO 🙈</button>
+<div class="proposal">
+<h2>Will you marry me? ❤️</h2>
+<div class="proposal-actions">
+<button id="yes" onclick="yes()">YES 😘</button>
+<button id="no" onmouseenter="moveNo()" onmouseover="moveNo()" onclick="moveNo()">NO 🙈</button>
+</div>
+</div>
 <div id="answer"></div>
 </section>
 </section>
@@ -147,7 +158,15 @@ function sendAnswersToWhatsApp(){
   window.open(url,"_blank");
 }
 function yes(){answer.innerHTML="<h2>Yayyyy! 😘💋 I love you forever ❤️</h2><p>Screenshot this and send it to me 😜💖</p>";burst()}
-function moveNo(){let b=document.getElementById("no");b.style.position="fixed";b.style.left=Math.random()*75+"vw";b.style.top=Math.random()*75+"vh"}
+function moveNo(){
+  const b=document.getElementById("no");
+  const padding=18;
+  const maxLeft=window.innerWidth-b.offsetWidth-padding;
+  const maxTop=window.innerHeight-b.offsetHeight-padding;
+  b.style.position="fixed";
+  b.style.left=(padding+Math.random()*Math.max(0,maxLeft-padding))+"px";
+  b.style.top=(padding+Math.random()*Math.max(0,maxTop-padding))+"px";
+}
 function burst(){for(let j=0;j<35;j++)setTimeout(makeHeart,j*70)}
 function makeHeart(){let h=document.createElement("span");h.className="floating";h.textContent=["❤️","💖","💕","😘","💋"][Math.floor(Math.random()*5)];h.style.left=Math.random()*100+"vw";h.style.fontSize=(18+Math.random()*28)+"px";h.style.animationDuration=(3+Math.random()*4)+"s";document.body.appendChild(h);setTimeout(()=>h.remove(),7000)}
 setInterval(makeHeart,700);
