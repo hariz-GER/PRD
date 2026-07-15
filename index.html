@@ -32,9 +32,6 @@ button:hover{transform:translateY(-2px)}
 .mini-gallery img{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;background:#ffe3ea;border:3px solid #fff;box-shadow:0 8px 18px #7c174033}
 .mini-gallery img.missing{display:none}
 .promise{padding:12px;border-radius:14px;background:#fff4f7;border:1px solid #ffd2df;font-weight:700}
-.answer-list{display:grid;gap:8px;margin:14px 0;text-align:left}
-.answer-item{padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #ffd2df;box-shadow:0 8px 16px #7c174014;font-size:14px}
-.answer-item strong{display:block;color:#8a2547;margin-bottom:3px}
 .floating{position:fixed;bottom:-40px;animation:float 6s linear infinite;opacity:.78;z-index:1}
 @keyframes float{to{transform:translateY(-115vh) rotate(360deg);opacity:0}}
 .hidden{display:none}.big{font-size:2.5rem}.kiss{font-size:2rem}
@@ -81,9 +78,10 @@ button:hover{transform:translateY(-2px)}
 </div>
 <p>En life la vandha best gift nee dhaan ❤️ Un smile, un care, un love ellame enakku romba special. Sandai potalum, kovam vandhalum, I will always choose you 😘</p>
 <p class="promise">Nee irundha pothum, every ordinary day becomes my favorite memory.</p>
-<div id="pickedAnswers" class="answer-list"></div>
 <p class="kiss">💋😘💖</p>
 <h2>Will you be my forever? ❤️</h2>
+<button onclick="downloadAnswers()">Download Excel Sheet 📄</button>
+<button onclick="sendAnswersToWhatsApp()">Send Answers to WhatsApp 💌</button>
 <button onclick="yes()">YES 😘</button><button id="no" onmouseover="moveNo()" onclick="moveNo()">NO 🙈</button>
 <div id="answer"></div>
 </section>
@@ -102,6 +100,7 @@ const qs=[
 ["Best gift in my life?",["Chocolate 🍫","Money 💸","YOU ❤️"]],
 ["Ready to unlock my heart? 🔐",["Yes baby 😘","Always ❤️","Open it now! 💖"]]
 ]; let i=0; const clickedAnswers=[];
+const OWNER_WHATSAPP_NUMBER="918778056883"; // Add your number with country code, example: "919876543210"
 const start=document.getElementById('start');
 const game=document.getElementById('game');
 const finalSection=document.getElementById('final');
@@ -112,8 +111,29 @@ const answer=document.getElementById('answer');
 document.querySelectorAll('img').forEach(img=>{img.onerror=()=>{img.classList.add('missing');img.closest('.polaroid')?.classList.add('missing')}});
 function begin(){start.classList.add("hidden");game.classList.remove("hidden");show()}
 function show(){bar.style.width=(i/qs.length*100)+"%";q.textContent=qs[i][0];opts.innerHTML="";qs[i][1].forEach(x=>{let b=document.createElement("button");b.className="option";b.textContent=x;b.onclick=()=>next(x);opts.appendChild(b)})}
-function next(choice){clickedAnswers[i]={question:qs[i][0],answer:choice};console.log("Clicked answers",clickedAnswers);i++;if(i<qs.length)show();else{game.classList.add("hidden");finalSection.classList.remove("hidden");showAnswers();burst()}}
-function showAnswers(){document.getElementById("pickedAnswers").innerHTML="<h2>Your cute answers 💌</h2>"+clickedAnswers.map(x=>`<div class="answer-item"><strong>${x.question}</strong>${x.answer}</div>`).join("")}
+function next(choice){clickedAnswers[i]={time:new Date().toLocaleString(),question:qs[i][0],answer:choice};i++;if(i<qs.length)show();else{game.classList.add("hidden");finalSection.classList.remove("hidden");downloadAnswers();sendAnswersToWhatsApp();burst()}}
+function csvCell(value){return `"${String(value).replaceAll('"','""')}"`}
+function answerMessage(){
+  return "Love Game Answers 💖\n\n"+clickedAnswers.map((x,index)=>`${index+1}. ${x.question}\nAnswer: ${x.answer}`).join("\n\n");
+}
+function downloadAnswers(){
+  const rows=[["Time","Question","Clicked Answer"],...clickedAnswers.map(x=>[x.time,x.question,x.answer])];
+  const csv=rows.map(row=>row.map(csvCell).join(",")).join("\n");
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const link=document.createElement("a");
+  link.href=URL.createObjectURL(blob);
+  link.download="love-game-answers.csv";
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+function sendAnswersToWhatsApp(){
+  if(!OWNER_WHATSAPP_NUMBER){
+    answer.innerHTML="<p>Please add your WhatsApp number in <b>OWNER_WHATSAPP_NUMBER</b> inside index.html.</p>";
+    return;
+  }
+  const url=`https://wa.me/${OWNER_WHATSAPP_NUMBER}?text=${encodeURIComponent(answerMessage())}`;
+  window.open(url,"_blank");
+}
 function yes(){answer.innerHTML="<h2>Yayyyy! 😘💋 I love you forever ❤️</h2><p>Screenshot this and send it to me 😜💖</p>";burst()}
 function moveNo(){let b=document.getElementById("no");b.style.position="fixed";b.style.left=Math.random()*75+"vw";b.style.top=Math.random()*75+"vh"}
 function burst(){for(let j=0;j<35;j++)setTimeout(makeHeart,j*70)}
