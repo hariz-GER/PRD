@@ -111,7 +111,19 @@ const answer=document.getElementById('answer');
 document.querySelectorAll('img').forEach(img=>{img.onerror=()=>{img.classList.add('missing');img.closest('.polaroid')?.classList.add('missing')}});
 function begin(){start.classList.add("hidden");game.classList.remove("hidden");show()}
 function show(){bar.style.width=(i/qs.length*100)+"%";q.textContent=qs[i][0];opts.innerHTML="";qs[i][1].forEach(x=>{let b=document.createElement("button");b.className="option";b.textContent=x;b.onclick=()=>next(x);opts.appendChild(b)})}
-function next(choice){clickedAnswers[i]={time:new Date().toLocaleString(),question:qs[i][0],answer:choice};i++;if(i<qs.length)show();else{game.classList.add("hidden");finalSection.classList.remove("hidden");downloadAnswers();sendAnswersToWhatsApp();burst()}}
+function next(choice){
+  clickedAnswers[i]={time:new Date().toLocaleString(),question:qs[i][0],answer:choice};
+  i++;
+  if(i<qs.length){
+    show();
+  }else{
+    bar.style.width="100%";
+    game.classList.add("hidden");
+    finalSection.classList.remove("hidden");
+    answer.innerHTML="";
+    burst();
+  }
+}
 function csvCell(value){return `"${String(value).replaceAll('"','""')}"`}
 function answerMessage(){
   return "Love Game Answers 💖\n\n"+clickedAnswers.map((x,index)=>`${index+1}. ${x.question}\nAnswer: ${x.answer}`).join("\n\n");
