@@ -5,23 +5,63 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Unlock My Heart 💖</title>
 <style>
-*{box-sizing:border-box} body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,#ff9a9e,#fad0c4,#fbc2eb);overflow:hidden;color:#5b1834}
-.card{width:min(92vw,430px);padding:28px;border-radius:28px;background:#ffffffd9;box-shadow:0 20px 60px #9b315044;text-align:center;backdrop-filter:blur(10px);position:relative;z-index:2}
-h1{margin:0 0 10px;font-size:2rem} p{line-height:1.55}.heart{font-size:64px;animation:beat 1s infinite}@keyframes beat{50%{transform:scale(1.18)}}
-button{border:0;border-radius:999px;padding:13px 20px;margin:7px;background:#ff477e;color:#fff;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 8px 18px #ff477e55}button:hover{transform:translateY(-2px)}
-.option{display:block;width:100%;margin:10px 0;background:#fff;color:#b51f55;border:2px solid #ff8fb1;box-shadow:none}
-.progress{height:9px;background:#ffd4e1;border-radius:10px;overflow:hidden;margin:18px 0}.bar{height:100%;background:#ff477e;transition:.4s}
-.floating{position:fixed;bottom:-40px;animation:float 6s linear infinite;opacity:.7}@keyframes float{to{transform:translateY(-115vh) rotate(360deg);opacity:0}}
-.hidden{display:none}.big{font-size:2.3rem}.kiss{font-size:2rem}
+*{box-sizing:border-box}
+:root{--rose:#f24b7f;--wine:#59152f;--blush:#ffe3ea;--cream:#fffaf7;--gold:#f6b85d}
+body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,-apple-system,sans-serif;background:radial-gradient(circle at 18% 14%,#fff2c8 0 10%,transparent 28%),radial-gradient(circle at 90% 20%,#ffc7d8 0 12%,transparent 30%),linear-gradient(135deg,#7c1740,#f05f87 45%,#ffd0bd);overflow:hidden;color:var(--wine)}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(#ffffff22 1px,transparent 1px),linear-gradient(90deg,#ffffff18 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#000,transparent 82%);pointer-events:none}
+.scene{width:min(94vw,960px);display:grid;grid-template-columns:.9fr minmax(330px,430px) .9fr;align-items:center;gap:18px;position:relative;z-index:2}
+.photo-strip{display:grid;gap:18px}
+.polaroid{min-height:178px;padding:10px 10px 38px;background:var(--cream);border-radius:8px;box-shadow:0 20px 45px #4b0f2d55;transform:rotate(var(--tilt));position:relative;overflow:hidden}
+.polaroid:after{content:attr(data-caption);position:absolute;left:12px;right:12px;bottom:11px;text-align:center;font-weight:800;color:#8a2547;font-size:14px}
+.polaroid img{width:100%;height:178px;object-fit:cover;border-radius:5px;display:block;background:linear-gradient(135deg,#ffdce6,#fff7dc)}
+.polaroid.missing img{display:none}
+.polaroid.missing:before{content:"💞";height:178px;border-radius:5px;display:grid;place-items:center;font-size:54px;background:linear-gradient(135deg,#ffdce6,#fff7dc)}
+.card{width:100%;padding:30px;border-radius:24px;background:#fffaf2e8;box-shadow:0 24px 70px #4b0f2d66;text-align:center;backdrop-filter:blur(14px);position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;inset:10px;border:1px solid #ffffffb5;border-radius:18px;pointer-events:none}
+.card>*{position:relative}
+h1{margin:0 0 10px;font-size:clamp(1.75rem,5vw,2.35rem);line-height:1.08}
+h2{font-size:1.35rem}
+p{line-height:1.55;margin:12px 0}
+.heart{font-size:68px;animation:beat 1s infinite;filter:drop-shadow(0 12px 18px #f24b7f55)}
+@keyframes beat{50%{transform:scale(1.18)}}
+button{border:0;border-radius:999px;padding:13px 20px;margin:7px;background:linear-gradient(135deg,var(--rose),#b91d55);color:#fff;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 10px 22px #f24b7f55;transition:.2s ease}
+button:hover{transform:translateY(-2px)}
+.option{display:block;width:100%;margin:10px 0;background:#fff;color:#9e194d;border:2px solid #ff94b6;box-shadow:0 8px 18px #a22a4a1f}
+.progress{height:9px;background:#ffd6df;border-radius:10px;overflow:hidden;margin:18px 0}.bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--rose));transition:.4s}
+.mini-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.mini-gallery img{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;background:#ffe3ea;border:3px solid #fff;box-shadow:0 8px 18px #7c174033}
+.mini-gallery img.missing{display:none}
+.promise{padding:12px;border-radius:14px;background:#fff4f7;border:1px solid #ffd2df;font-weight:700}
+.answer-list{display:grid;gap:8px;margin:14px 0;text-align:left}
+.answer-item{padding:10px 12px;border-radius:12px;background:#fff;border:1px solid #ffd2df;box-shadow:0 8px 16px #7c174014;font-size:14px}
+.answer-item strong{display:block;color:#8a2547;margin-bottom:3px}
+.floating{position:fixed;bottom:-40px;animation:float 6s linear infinite;opacity:.78;z-index:1}
+@keyframes float{to{transform:translateY(-115vh) rotate(360deg);opacity:0}}
+.hidden{display:none}.big{font-size:2.5rem}.kiss{font-size:2rem}
+@media (max-width:820px){body{overflow:auto}.scene{grid-template-columns:1fr;padding:18px}.photo-strip{grid-template-columns:repeat(3,1fr);order:2}.photo-strip.right{display:none}.polaroid{min-height:auto;padding:7px 7px 28px}.polaroid img,.polaroid.missing:before{height:auto;aspect-ratio:1}.polaroid:after{font-size:11px;bottom:8px}.card{order:1}}
 </style>
 </head>
 <body>
 <div id="hearts"></div>
-<main class="card">
+<main class="scene">
+<div class="photo-strip">
+<figure class="polaroid" style="--tilt:-7deg" data-caption="Our cutest smile"><img src="assets/photo-1.jpeg" alt="Our cutest smile"></figure>
+<figure class="polaroid" style="--tilt:5deg" data-caption="Video call love"><img src="assets/photo-2.jpeg" alt="Video call love"></figure>
+<figure class="polaroid" style="--tilt:-4deg" data-caption="Black and white magic"><img src="assets/photo-6.jpeg" alt="Black and white magic"></figure>
+</div>
+<section class="card">
 <section id="start">
 <div class="heart">💖</div>
 <h1>Unlock My Heart</h1>
-<p>Hey my love 😘 I made a tiny game only for you. Complete it to unlock your surprise 💋</p>
+<div class="mini-gallery">
+<img src="assets/photo-1.jpeg" alt="Us together">
+<img src="assets/photo-2.jpeg" alt="Video call memory">
+<img src="assets/photo-3.jpeg" alt="Mall selfie memory">
+<img src="assets/photo-4.jpeg" alt="Green light selfie">
+<img src="assets/photo-5.jpeg" alt="Happy close selfie">
+<img src="assets/photo-6.jpeg" alt="Black and white memory">
+</div>
+<p>Hey my love 😘 I made this tiny love game only for you. Every answer brings you closer to the surprise in my heart 💋</p>
 <button onclick="begin()">Start Our Love Game ❤️</button>
 </section>
 <section id="game" class="hidden">
@@ -31,12 +71,28 @@ button{border:0;border-radius:999px;padding:13px 20px;margin:7px;background:#ff4
 <section id="final" class="hidden">
 <div class="big">🎉💖🔓</div>
 <h1>You Unlocked My Heart!</h1>
+<div class="mini-gallery">
+<img src="assets/photo-1.jpeg" alt="Us together">
+<img src="assets/photo-2.jpeg" alt="Video call memory">
+<img src="assets/photo-3.jpeg" alt="Mall selfie memory">
+<img src="assets/photo-4.jpeg" alt="Green light selfie">
+<img src="assets/photo-5.jpeg" alt="Happy close selfie">
+<img src="assets/photo-6.jpeg" alt="Black and white memory">
+</div>
 <p>En life la vandha best gift nee dhaan ❤️ Un smile, un care, un love ellame enakku romba special. Sandai potalum, kovam vandhalum, I will always choose you 😘</p>
+<p class="promise">Nee irundha pothum, every ordinary day becomes my favorite memory.</p>
+<div id="pickedAnswers" class="answer-list"></div>
 <p class="kiss">💋😘💖</p>
 <h2>Will you be my forever? ❤️</h2>
 <button onclick="yes()">YES 😘</button><button id="no" onmouseover="moveNo()" onclick="moveNo()">NO 🙈</button>
 <div id="answer"></div>
 </section>
+</section>
+<div class="photo-strip right">
+<figure class="polaroid" style="--tilt:6deg" data-caption="My forever person"><img src="assets/photo-3.jpeg" alt="My forever person"></figure>
+<figure class="polaroid" style="--tilt:-4deg" data-caption="Always us"><img src="assets/photo-4.jpeg" alt="Always us"></figure>
+<figure class="polaroid" style="--tilt:4deg" data-caption="That happy smile"><img src="assets/photo-5.jpeg" alt="That happy smile"></figure>
+</div>
 </main>
 <script>
 const qs=[
@@ -45,7 +101,7 @@ const qs=[
 ["How much do I love you?",["100% ❤️","Infinity ♾️","Infinity + extra kisses 💋"]],
 ["Best gift in my life?",["Chocolate 🍫","Money 💸","YOU ❤️"]],
 ["Ready to unlock my heart? 🔐",["Yes baby 😘","Always ❤️","Open it now! 💖"]]
-]; let i=0;
+]; let i=0; const clickedAnswers=[];
 const start=document.getElementById('start');
 const game=document.getElementById('game');
 const finalSection=document.getElementById('final');
@@ -53,9 +109,11 @@ const bar=document.getElementById('bar');
 const q=document.getElementById('q');
 const opts=document.getElementById('opts');
 const answer=document.getElementById('answer');
+document.querySelectorAll('img').forEach(img=>{img.onerror=()=>{img.classList.add('missing');img.closest('.polaroid')?.classList.add('missing')}});
 function begin(){start.classList.add("hidden");game.classList.remove("hidden");show()}
-function show(){bar.style.width=(i/qs.length*100)+"%";q.textContent=qs[i][0];opts.innerHTML="";qs[i][1].forEach(x=>{let b=document.createElement("button");b.className="option";b.textContent=x;b.onclick=next;opts.appendChild(b)})}
-function next(){i++;if(i<qs.length)show();else{game.classList.add("hidden");finalSection.classList.remove("hidden");burst()}}
+function show(){bar.style.width=(i/qs.length*100)+"%";q.textContent=qs[i][0];opts.innerHTML="";qs[i][1].forEach(x=>{let b=document.createElement("button");b.className="option";b.textContent=x;b.onclick=()=>next(x);opts.appendChild(b)})}
+function next(choice){clickedAnswers[i]={question:qs[i][0],answer:choice};console.log("Clicked answers",clickedAnswers);i++;if(i<qs.length)show();else{game.classList.add("hidden");finalSection.classList.remove("hidden");showAnswers();burst()}}
+function showAnswers(){document.getElementById("pickedAnswers").innerHTML="<h2>Your cute answers 💌</h2>"+clickedAnswers.map(x=>`<div class="answer-item"><strong>${x.question}</strong>${x.answer}</div>`).join("")}
 function yes(){answer.innerHTML="<h2>Yayyyy! 😘💋 I love you forever ❤️</h2><p>Screenshot this and send it to me 😜💖</p>";burst()}
 function moveNo(){let b=document.getElementById("no");b.style.position="fixed";b.style.left=Math.random()*75+"vw";b.style.top=Math.random()*75+"vh"}
 function burst(){for(let j=0;j<35;j++)setTimeout(makeHeart,j*70)}
